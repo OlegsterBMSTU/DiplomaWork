@@ -9,10 +9,10 @@
 #include "common.h"
 
 using namespace std;
-//Для прохода назад будем искать какая ячейка матрицы MatrixWork [0..5]
-//соответствует ячеке matrixWork [6..11]
+//Р”Р»СЏ РїСЂРѕС…РѕРґР° РЅР°Р·Р°Рґ Р±СѓРґРµРј РёСЃРєР°С‚СЊ РєР°РєР°СЏ СЏС‡РµР№РєР° РјР°С‚СЂРёС†С‹ MatrixWork [0..5]
+//СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓРµС‚ СЏС‡РµРєРµ matrixWork [6..11]
 
-/* для примера
+/* РґР»СЏ РїСЂРёРјРµСЂР°
 matrixWork0 -> exitConvolution1_0 -> matrixWork5
 */
 
@@ -35,7 +35,7 @@ T fromString(const string& s)
 	iss >> res;
 	return res;
 }
-template <typename T> // шаблон преобразование в string
+template <typename T> // С€Р°Р±Р»РѕРЅ РїСЂРµРѕР±СЂР°Р·РѕРІР°РЅРёРµ РІ string
 string toString(T val)
 {
 	std::ostringstream oss;
@@ -49,28 +49,28 @@ string toString(T val)
 void fillingArrays() {
 	int i = 0, j = 0;
 	int myFileSize = 0;
-	string fileNameOut = "matrixWork" + toString(i + 6) + ".txt";	//Выходной файл 196*196 элементов
-	string fileNameIn = "matrixWork" + toString(i) + ".txt";		// входной файл 3600*3600
+	string fileNameOut = "matrixWork" + toString(i + 6) + ".txt";	//Р’С‹С…РѕРґРЅРѕР№ С„Р°Р№Р» 196*196 СЌР»РµРјРµРЅС‚РѕРІ
+	string fileNameIn = "matrixWork" + toString(i) + ".txt";		// РІС…РѕРґРЅРѕР№ С„Р°Р№Р» 3600*3600
 	string fileNameIntermediate = "exit_convolusion_" + toString(j) + ' ' + toString(0) + ".txt";
-	string pointer;	//указатель на элемент, который считваем
-	/* Создаем массивы,куда считаем данные из файлов для поиска элементов */
-	/* Элемент запишем в отдельную структуру, где будут храниться индексы*/
+	string pointer;	//СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЌР»РµРјРµРЅС‚, РєРѕС‚РѕСЂС‹Р№ СЃС‡РёС‚РІР°РµРј
+	/* РЎРѕР·РґР°РµРј РјР°СЃСЃРёРІС‹,РєСѓРґР° СЃС‡РёС‚Р°РµРј РґР°РЅРЅС‹Рµ РёР· С„Р°Р№Р»РѕРІ РґР»СЏ РїРѕРёСЃРєР° СЌР»РµРјРµРЅС‚РѕРІ */
+	/* Р­Р»РµРјРµРЅС‚ Р·Р°РїРёС€РµРј РІ РѕС‚РґРµР»СЊРЅСѓСЋ СЃС‚СЂСѓРєС‚СѓСЂСѓ, РіРґРµ Р±СѓРґСѓС‚ С…СЂР°РЅРёС‚СЊСЃСЏ РёРЅРґРµРєСЃС‹*/
 
-	myFileSize = sqrt(sizeFile(fileNameOut));    // двумерный массив выходных данных
+	myFileSize = sqrt(sizeFile(fileNameOut));    // РґРІСѓРјРµСЂРЅС‹Р№ РјР°СЃСЃРёРІ РІС‹С…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
 	 exitDataArray = new float*[myFileSize];
 	 for (int i = 0; i < myFileSize; i++) 
 	 {
 		 exitDataArray[i] = new float[myFileSize];
 	 }
 
-	 myFileSize = sqrt(sizeFile(fileNameIntermediate));   //двумерный массив промежуточных данных
+	 myFileSize = sqrt(sizeFile(fileNameIntermediate));   //РґРІСѓРјРµСЂРЅС‹Р№ РјР°СЃСЃРёРІ РїСЂРѕРјРµР¶СѓС‚РѕС‡РЅС‹С… РґР°РЅРЅС‹С…
 	 intermediateDataArray = new float*[myFileSize];
 	 for (int i = 0; i < myFileSize; i++)
 	 {
 		 intermediateDataArray[i] = new float[myFileSize];
 	 }
 
-	 myFileSize = sqrt(sizeFile(fileNameIn));                 //двумерный массив входных данных
+	 myFileSize = sqrt(sizeFile(fileNameIn));                 //РґРІСѓРјРµСЂРЅС‹Р№ РјР°СЃСЃРёРІ РІС…РѕРґРЅС‹С… РґР°РЅРЅС‹С…
 	 inDataArray= new float* [myFileSize];
 	 for (int i=0;i<myFileSize;i++)
 	 {
@@ -81,7 +81,7 @@ void fillingArrays() {
 	 ifstream iterFile(fileNameIntermediate);
 	 ifstream inFIle(fileNameIn);
 
-	 // Записываем данные из файлов в массивы
+	 // Р—Р°РїРёСЃС‹РІР°РµРј РґР°РЅРЅС‹Рµ РёР· С„Р°Р№Р»РѕРІ РІ РјР°СЃСЃРёРІС‹
 	 myFileSize = sqrt(sizeFile(fileNameOut));
 	 for (int i = 0; i < myFileSize; i++) 
 	 {
@@ -110,7 +110,8 @@ void fillingArrays() {
 	 }		 
 }
 
-//Эта функция будет искать коордитнаты значения в главном массиве
+//Р­С‚Р° С„СѓРЅРєС†РёСЏ Р±СѓРґРµС‚ РёСЃРєР°С‚СЊ РєРѕРѕСЂРґРёС‚РЅР°С‚С‹ Р·РЅР°С‡РµРЅРёСЏ РІ РіР»Р°РІРЅРѕРј РјР°СЃСЃРёРІРµ
 void lookingForCoordinates() {
+	
 }
 
