@@ -111,7 +111,26 @@ void fillingArrays() {
 }
 
 //Эта функция будет искать коордитнаты значения в главном массиве
-void lookingForCoordinates() {
+void lookingForCoordinatesInTheMiddleArray() {	
+	// Будем пробовать искать координату в интермедиэйт массиве исходя из из данных в выходном массиве
+	// и будем сохранять в структуру 
+	int myFileSizeOut = sqrt(sizeFile(fileNameOut));		//храним размер массива выходного файла
+	int myFileSizeIntermediate = sqrt(sizeFile(fileNameIntermediate));	// храним размер массива среднего файла
+	for (int i = 0; i < myFileSizeOut; i++) {
+		for (int j = 0; j < myFileSizeOut; j++) {
+			for (int x = i * 4; x < i*4+4; x++) { 
+			/* от элемента i*4 до i*4+4 для того что i однозначно определяет в каком
+			диапазоне будет находится координата в среднем массиве */	
+				for (int y = 0; y < myFileSizeIntermediate; y++) 	{
+				/* от элемента j*4 до j*4+4 для того что j однозначно определяет в каком
+				диапазоне будет находится координата в среднем массиве */
+					if (exitDataArray[i][j] == intermediateDataArray[x][y]) { //Если элемент выходного массива найден в среднем
+						coordinates[i].i = i;	//тогда сохраняем координату i
+						coordinates[i].j = j;   // и координату j
+				}
+			}
+		}
+	}
 	
 }
 
