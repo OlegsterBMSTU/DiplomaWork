@@ -6,6 +6,7 @@
 #include <sstream>
 #include <cstdio>
 #include <string>
+
 #include"common.h"
 
 using namespace std;
@@ -64,11 +65,11 @@ void subSampling(int index1, int index2, int selector)
 
 	// Название выходного файла с данными
 	// с учетом его индекса [0..11] или [1..12]
-	from_s1= "matrixWork";
+	from_s1 = "matrixWork";
 	from_s1 += (toString(selector)) + ".txt";
 	ofstream f2(from_s1);
-	
-	
+
+
 
 	// Цикл выбора максимальных (ReLu) элементов // 
 	/*	while (getline(f1, line)) {
@@ -94,14 +95,19 @@ void subSampling(int index1, int index2, int selector)
 			j = 0; i++;
 		}
 	}
-	f1.close(); 
+	f1.close();
 	int length = sqrt(sizeFile(from_s));
 	int steps = ((sizeFile(from_s)) / 16);	//потому то входной файл из 3136 / 16 есть результат последнего файла
 	int ai = 0, aj = 0;
 	k = 0;
 	i = 0; j = 0;
+	
 	float * max = new float[length];
 	bool key = true;
+	key0 = false;
+	key1 = false;
+	key2 = false;
+	int numberstring = 0, numbercolumn = 0;
 	while (k < steps)		//пока не набрали достаточное количество карт
 	{
 		if (key) {			//если запись разрешена. Для каждой новой первой карты 4х4 первый элемент записываем как максимальный
@@ -110,29 +116,46 @@ void subSampling(int index1, int index2, int selector)
 		}
 		(matrixWork[i][j] > max[k]) ? max[k] = matrixWork[i][j] : 0;	//стандартное условие сравнения
 		
-		if ((j + 1) % 4 == 0) {	//когда достигли 4 ой ячейки по горизонтали в карте 4х4
-			j = aj;			//сбросить j
-			key0 = true;
+		if ((j + 1) % 4 == 0) {	//Если дошли до конца строки в карте 4х4
+			j = aj;					//обнулить j
+			numberstring++;			//посчитали номер строки в карте 4х4
+//			numbercolumn = 0;
+			key0 = true;			//чтобы не проскочить элемент при проходе
+			i++;
 		}
-		if (((j + 1) % 4 == 0) && ((i + 1) % 4 == 0)) {  //когда карту 4х4 прохавали до конца, т.е. i=4,j=4
-			i = ai;			// сместили i в начало, где были
-			j++;			//двикаем j
-			aj += 4;		//двигаем указатель для j
-			k++;			// подняли итератор, так как работы с текущим набором закончили
-			key = true;		//для разрешения забись для сравнения в новом наборе данных
+
+		if ((numberstring == 4) && (numbercolumn+1 == 4)) {	//если находимся в ячейке 4-4, то есть прошли карту 4х4 до конца
+			numberstring = 0;		//сбрасываем счетчик строк
+			numbercolumn = 0;		// сбрасываем счетчик столбцов
+			k++;					//начали исследовать следующую карту
+			aj += 4;				//повысили индекс aj для дальнейшей работы
+			key = true;				//разрешили запись первого элемента для сравнения в массив максимальных
+			i = ai;					//сместили i на первую строчку карты 4х4
+			j = aj;					//сместили j на первый элемент первой строчки карты 4х4
+			key1 = true;			//реагирует на iсброс
 		}
-		if ((j == length) && ((i+1)%4) ==0 ) { //когда достигли последней карты 4х4 в строке матрицы
-			i++;			//передвинули i на следующую строку
-			j = 0;			// поставили индекс j в начало
-			aj=0;			//смещение установили в 0
-			ai += 4;		//смещение по i указали +4 для. Определяем как-аяименно линия из 4х элементов работает
+
+		//Когда достигли последнего элемента в проходе по "первой строке" шириной 4i массива.
+		// То есть для первой строчки это будет array[3][array.length]
+		if ((j == length)) {	// && ((i+1)%4==0)) {	
+			ai += 4;				//повысили индекс ai для дальнейшей работы
+			i = ai;					//Передвигаем i на следующую строку (вместо 0 стала 4)
+			aj = 0;					//установили индекс aj в 0, так как строка начинается 
+			j = aj;
+			key1 = true;
 		}
-//		if (!key0) j++;
-		(!key0) ? j++ : 0 ;	//почему бы и нет? 
-		if (key0) {			//если закончили читать строчку в карте 4х4
-			i++;			//смещаем i на следующую строчку
-			key0 = 0;		// и ставим блок, пока не закончим строчку в массиве 4х4
+//		(!key0) ? j++ : 0;
+//		key0 ? key0 = false, numbercolumn = 0, numberstring++ : j++, numbercolumn++;
+		if (key0) {
+			key0 = false;
+			numbercolumn = 0;
 		}
+		else {
+			j++;
+			numbercolumn++;
+		}
+		//key1 ? i++, key1 = false : 0;
+		//numbercolumn++;
 	}
 
 	for (int i = 0; i < steps; i++) {
@@ -152,11 +175,11 @@ void writeMaxInFile(float max) {
 }
 
 void trunkInMaxFile() {
-	int i=22;
-	ofstream f2(from_s1, ios::delete);
-	cout<<"\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
-	cout<<"It was called trunkInMaxFile function"<<endl;
-	cout<<"File "<<from_s1<<" was cleared"<<endl;
-	cout<<"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"<<endl;
+	int i = 22;
+	ofstream f2(from_s1, ios::trunc);
+	cout << "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
+	cout << "It was called trunkInMaxFile function" << endl;
+	cout << "File " << from_s1 << " was cleared" << endl;
+	cout << "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" << endl;
 	f2.close();
 }
