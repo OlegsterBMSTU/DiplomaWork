@@ -155,8 +155,8 @@ float * newWeightsArray = new float[myFileSize];    //Массив для нов
 int number=0;
 void coorectWeights()
 {
-    for (int i = coord.i; i<coord.i+4;i++) {
-        for (int j=coord.j;j<coord.j+4;j++) {
+    for (int i = coordinate.i; i<coordinate.i+4;i++) {
+        for (int j=coordinate.j;j<coordinate.j+4;j++) { 
             newWeightsArray[number] = weightsArray[number] + 1 * sigma * inputArray[i][j];
         }
     }
