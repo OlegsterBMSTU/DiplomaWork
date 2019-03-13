@@ -143,6 +143,14 @@ void fillingArrayOfWeoghts();
     weightsFile.close();
 }
 
+void deleteArrays()
+{
+    delete[]weightsArray;
+    delete[]newWeightsArray;
+    delete[]inputArray;
+    delete[]middleArray;
+    delete[]outputArray;
+}
 float * newWeightsArray = new float[myFileSize];    //Массив для новых весов
 int number=0;
 void coorectWeights()
@@ -157,7 +165,7 @@ void coorectWeights()
     string nameFile = string nameFile = "weight_conv_1.txt";  //для 0,1 = 1, 2,3 = 2, 4,5 = 3
     ofstream weightsFile(nameFile, ios::trunc);
     while (number < myFileSize) weightsArray << newWeightsArray[number++]<<endl;
-
+    deleteArrays(); //Удаляем все динамические массивы
 }
 
 
